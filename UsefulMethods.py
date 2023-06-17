@@ -27,4 +27,3 @@ async def create_embed(
         em.set_footer(text=footer_text)
     
     return em
-

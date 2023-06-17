@@ -2,7 +2,11 @@ import json
 import discord
 from discord.ext import commands
 
-modes = ["Welcome","Exit","Logs"]
+modes = [
+    "Welcome",
+    "Exit",
+    "Logs"
+]
 
 async def get_Guild_data():
     """
