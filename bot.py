@@ -3,13 +3,13 @@ from discord.ext import commands
 from config import TOKEN
 
 cogs = [
-    # "cogs.EntertainmentCommands",
-    # "cogs.RoleCommands",
-    # "cogs.EconomyCommands",
-    # "cogs.ModerationCommands",
-    # "cogs.WelcomeCommands",
-    # "cogs.LogCommands",
-    # "cogs.ErrorHandler"
+    "cogs.EntertainmentCommands",
+    "cogs.RoleCommands",
+    "cogs.EconomyCommands",
+    "cogs.ModerationCommands",
+    "cogs.WelcomeCommands",
+    "cogs.LogCommands",
+    "cogs.ErrorHandler"
 ]
 
 class MyBot(commands.Bot):
