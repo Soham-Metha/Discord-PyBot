@@ -3,7 +3,8 @@ from discord import app_commands
 from discord.ext import commands
 import json
 import random
-import UsefulMethods
+import src.UsefulMethods
+from pathlib import Path
 
 items=[
         {"name": "Cookie", "price": 20, "description": "Food"},
@@ -12,6 +13,7 @@ items=[
         {"name": "PC", "price": 5000, "description": "Game"}
       ]
 
+DATA_DIR = Path(__file__).resolve().parent.parent.parent / "data"
 class EconomyCommands(commands.Cog):
 
     def __init__(self,bot = commands.Bot) :
@@ -21,10 +23,8 @@ class EconomyCommands(commands.Cog):
     async def balance(self,interaction: discord.Interaction, member: discord.Member = None):
 
         user = interaction.user if member == None else member
-
-        bal = get_user_bal( str( user.id ) )
-
-        em = discord.Embed( 
+        bal  = get_user_bal( str( user.id ) )
+        em   = discord.Embed( 
             title= f"{user.display_name}'s balance",
             color= discord.Color.red() 
         )
@@ -148,7 +148,7 @@ class EconomyCommands(commands.Cog):
         rob a user
         """
         robber_bal = get_user_bal(str(interaction.user.id))
-        user_bal = get_user_bal(str(member.id))
+        user_bal   = get_user_bal(str(member.id))
 
         if robber_bal[0] < 1000:
             await interaction.response.send_message("check your balance first idiot")
@@ -173,8 +173,8 @@ class EconomyCommands(commands.Cog):
         """
         em = discord.Embed(title="Shop",color=discord.Colour.blurple())
         for item in items:
-            name = item["name"]
-            price = item["price"]
+            name        = item["name"]
+            price       = item["price"]
             description = item["description"]
             em.add_field(name=name, value=f"${price} | {description} ", inline=False)
 
@@ -206,7 +206,7 @@ class EconomyCommands(commands.Cog):
 
         em = discord.Embed(title="Inventory")
         for item in inv:
-            name = item["item"]
+            name   = item["item"]
             amount = item["amount"]
             em.add_field(name=name, value=amount)
 
@@ -246,12 +246,12 @@ def sell_this(user, item_name, amount, price=None):
     item_name = item_name.lower()
     item_check = None
     for item in items:
-            name = item["name"].lower()
-            if name == item_name:
-                item_check = name
-                if price is None:
-                    price = 0.9 * item["price"]
-                break
+        name = item["name"].lower()
+        if name == item_name:
+            item_check = name
+            if price is None:
+                price = 0.9 * item["price"]
+            break
 
     #Check if the item specified exists
     if item_check is None:
@@ -264,7 +264,7 @@ def sell_this(user, item_name, amount, price=None):
     index = 0
     t = None
     for thing in users[str(user.id)]["bag"]:
-        n = thing["item"]
+        n    = thing["item"]
         if n == item_name:
             old_amt = thing["amount"]
             new_amt = old_amt - amount
@@ -285,24 +285,24 @@ def buy_this(user : discord.Member, item:str, amount:int):
     """
     add `amount` number of `item`s to `user`'s bag and decrement his balance as per the item price
     """
-    item_name = item.lower()
+    item_name  = item.lower()
     item_check = None
 
     # Checks if the item exists in the Shop
     for item in items:
-        name = item["name"].lower()
+        name    = item["name"].lower()
         if name == item_name:
             item_check = name
-            price = item["price"]
+            price      = item["price"]
             break
         
     # If item doesn't exist , return code 1
     if item_check is None:
         return [False, 1]
 
-    cost = price * amount
+    cost  = price * amount
     users = get_all_data()
-    bal = get_user_bal(str(user.id))
+    bal   = get_user_bal(str(user.id))
 
     # If user does't have enough money , return code 2
     if bal[0] < cost:
@@ -313,7 +313,7 @@ def buy_this(user : discord.Member, item:str, amount:int):
     # otherwise append the item to the bag
 
     index = 0
-    t = None
+    t     = None
     for thing in users[str(user.id)]["bag"]:
         n = thing["item"]
         if n == item_name:
@@ -346,8 +346,8 @@ def open_account(user_id:str):
     if user_id in users:
         return False
     users[user_id] = {}
-    users[user_id]["wallet"] = 69
-    users[user_id]["bank"] = 420
+    users[user_id]["wallet"] = 110
+    users[user_id]["bank"] = 1230
     users[user_id]["bag"] = []
     save_all_data(users=users)
     return True
@@ -356,7 +356,7 @@ def get_all_data():
     """
     returns the data saved in `userdata.json`
     """
-    with open("userdata.json", "r") as f:
+    with open(DATA_DIR / "userdata.json", "r") as f:
         users = json.load(f)
     return users
 
@@ -364,7 +364,7 @@ def save_all_data(users):
     """
     saves the data passed to `userdata.json`
     """
-    with open("userdata.json", "w") as f:
+    with open(DATA_DIR / "userdata.json", "w") as f:
         json.dump(users, f,indent=4)
 
 def get_user_bal(user_id:str ):

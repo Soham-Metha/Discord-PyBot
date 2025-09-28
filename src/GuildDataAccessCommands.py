@@ -1,6 +1,7 @@
 import json
 import discord
 from discord.ext import commands
+from pathlib import Path
 
 modes = [
     "Welcome",
@@ -8,11 +9,13 @@ modes = [
     "Logs"
 ]
 
+DATA_DIR = Path(__file__).resolve().parent.parent / "data"
+
 def get_guild_data():
     """
     returns all the data stored in `guilddata.json`
     """
-    with open("guilddata.json", "r") as f:
+    with open(DATA_DIR / "guilddata.json", "r") as f:
         guilds = json.load(f)
     return guilds
 
@@ -20,7 +23,7 @@ def save_guild_data(guilds):
     """
     writes the data passed to the `guilddata.json` 
     """
-    with open("guilddata.json", "w") as f:
+    with open(DATA_DIR / "guilddata.json", "w") as f:
         json.dump(obj = guilds,fp = f,indent=4)
 
 async def set_init_vals(guild_id:str):

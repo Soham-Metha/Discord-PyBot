@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 from discord import app_commands
-import GuildDataAccessCommands
+import src.GuildDataAccessCommands
 
 class LogCommands(commands.Cog):
 

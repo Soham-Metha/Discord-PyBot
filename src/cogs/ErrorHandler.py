@@ -15,9 +15,8 @@ class ErrorHandler(commands.Cog):
     async def on_command_error(self,ctx : commands.Context,error:commands.CommandError):
         if isinstance(error,commands.MissingPermissions):
             await ctx.send("You don't have permissions to use this command",ephemeral=True)
-            return
-        await ctx.send(f"There was an error with the command : \n{type(error).__name__}")
-
+        else:
+            await ctx.send(f"There was an error with the command : \n{type(error).__name__}")
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(ErrorHandler(bot=bot))

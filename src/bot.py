@@ -1,15 +1,15 @@
 import discord
 from discord.ext import commands
-from config import TOKEN
+from src.config import TOKEN
 
 cogs = [
-    "cogs.EntertainmentCommands",
-    "cogs.RoleCommands",
-    "cogs.EconomyCommands",
-    "cogs.ModerationCommands",
-    "cogs.WelcomeCommands",
-    "cogs.LogCommands",
-    "cogs.ErrorHandler"
+    "src.cogs.EntertainmentCommands",
+    "src.cogs.RoleCommands",
+    "src.cogs.EconomyCommands",
+    "src.cogs.ModerationCommands",
+    "src.cogs.WelcomeCommands",
+    "src.cogs.LogCommands",
+    "src.cogs.ErrorHandler"
 ]
 
 class MyBot(commands.Bot):

@@ -1,7 +1,7 @@
 import discord
 from discord import app_commands
 from discord.ext import commands
-import UsefulMethods
+import src.UsefulMethods
 
 class EntertainmentCommands(commands.Cog):
 
@@ -23,7 +23,7 @@ class EntertainmentCommands(commands.Cog):
         get the profile picture of a user
         """
         member = interaction.user if member == None else member
-        em = discord.Embed(title=f"{member.display_name}'s Profile picture", colour=discord.Colour.random())
+        em     = discord.Embed(title=f"{member.display_name}'s Profile picture", colour=discord.Colour.random())
         em.set_image(url= f"{member.display_avatar}")
         await interaction.response.send_message(embed=em)
 
@@ -43,17 +43,16 @@ class EntertainmentCommands(commands.Cog):
         create an embed according to your own requirements
         """
         embed= UsefulMethods.create_embed(
-            title=title, 
-            desc=desc,
-            url=url, 
-            author=author, 
-            image=image, 
-            thumbnail=thumbnail,
-            footer_img=footer_img, 
-            footer_text=footer_text
+            title      = title, 
+            desc       = desc,
+            url        = url, 
+            author     = author, 
+            image      = image, 
+            thumbnail  = thumbnail,
+            footer_img = footer_img, 
+            footer_text= footer_text
         )
         await interaction.response.send_message(embed=embed)
-
 
 async def setup(bot : commands.Bot):
     await bot.add_cog(EntertainmentCommands(bot=bot))
