@@ -42,8 +42,9 @@ class EntertainmentCommands(commands.Cog):
         """
         create an embed according to your own requirements
         """
-        embed= await UsefulMethods.create_embed(
+        embed= UsefulMethods.create_embed(
             title=title, 
+            desc=desc,
             url=url, 
             author=author, 
             image=image, 

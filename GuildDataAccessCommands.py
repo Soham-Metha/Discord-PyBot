@@ -8,7 +8,7 @@ modes = [
     "Logs"
 ]
 
-async def get_guild_data():
+def get_guild_data():
     """
     returns all the data stored in `guilddata.json`
     """
@@ -16,7 +16,7 @@ async def get_guild_data():
         guilds = json.load(f)
     return guilds
 
-async def save_guild_data(guilds):
+def save_guild_data(guilds):
     """
     writes the data passed to the `guilddata.json` 
     """

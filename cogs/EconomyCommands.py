@@ -22,7 +22,7 @@ class EconomyCommands(commands.Cog):
 
         user = interaction.user if member == None else member
 
-        bal = await get_user_bal( str( user.id ) )
+        bal = get_user_bal( str( user.id ) )
 
         em = discord.Embed( 
             title= f"{user.display_name}'s balance",
@@ -47,7 +47,7 @@ class EconomyCommands(commands.Cog):
         beg the devs to give you sum $$
         """
         earnings = random.randrange(1001)
-        await update_user_bal(str(interaction.user.id), earnings)
+        update_user_bal(str(interaction.user.id), earnings)
         await interaction.response.send_message(f"The dev gave you {earnings} coins!!")
 
     @app_commands.command()
@@ -55,14 +55,14 @@ class EconomyCommands(commands.Cog):
         """
         withdraw $$$ from yo bank
         """
-        bal = await get_user_bal(str(interaction.user.id)) 
+        bal = get_user_bal(str(interaction.user.id)) 
 
         if amount > bal[1]:
             await interaction.response.send_message("check your bank balance first idiot")
             return
 
-        await update_user_bal(str(interaction.user.id), amount)
-        await update_user_bal(str(interaction.user.id), -1 * amount, "bank")
+        update_user_bal(str(interaction.user.id), amount)
+        update_user_bal(str(interaction.user.id), -1 * amount, "bank")
         await interaction.response.send_message(f"you withdrew {amount} coins")
 
     @app_commands.command()
@@ -70,14 +70,14 @@ class EconomyCommands(commands.Cog):
         """
         deposit $$$ into your bank
         """
-        bal = await get_user_bal(str(interaction.user.id))
+        bal = get_user_bal(str(interaction.user.id))
 
         if amount > bal[0]:
             await interaction.response.send_message("check your wallet balance first idiot")
             return
 
-        await update_user_bal(str(interaction.user.id), -1 * amount)
-        await update_user_bal(str(interaction.user.id), amount, "bank")
+        update_user_bal(str(interaction.user.id), -1 * amount)
+        update_user_bal(str(interaction.user.id), amount, "bank")
         await interaction.response.send_message(f"you deposited {amount} coins")
 
     @app_commands.command()
@@ -85,7 +85,7 @@ class EconomyCommands(commands.Cog):
         """
         send $$$ to someone
         """
-        bal = await get_user_bal(str(interaction.user.id))
+        bal = get_user_bal(str(interaction.user.id))
 
         if amount > bal[0]:
             await interaction.response.send_message("check your balance first idiot")
@@ -95,8 +95,8 @@ class EconomyCommands(commands.Cog):
             await interaction.response.send_message("you are an idiot")
             return
 
-        await update_user_bal(str(interaction.user.id), -1 * amount)
-        await update_user_bal(str(member.id), amount)
+        update_user_bal(str(interaction.user.id), -1 * amount)
+        update_user_bal(str(member.id), amount)
         await interaction.response.send_message(f"you gave {amount} coins to {member}")
 
     @app_commands.command()
@@ -104,7 +104,7 @@ class EconomyCommands(commands.Cog):
         """
         Gamble with yo coins
         """
-        bal = await get_user_bal(str(interaction.user.id))
+        bal = get_user_bal(str(interaction.user.id))
 
         if amount > bal[0]:
             await interaction.response.send_message("check your wallet balance first idiot")
@@ -115,28 +115,28 @@ class EconomyCommands(commands.Cog):
             return
 
         final = []
-        for i in range(3):
+        for _ in range(3):
             a = random.choice(["1", "2", "3", "4", "5", "6", "7"])
             final.append(a)
 
         if final[0] == final[1] == final[2]:
-            await update_user_bal(str(interaction.user.id), 3 * amount)
-            embed= await UsefulMethods.create_embed(
+            update_user_bal(str(interaction.user.id), 3 * amount)
+            embed= UsefulMethods.create_embed(
                 title="$$$$$", 
                 desc=f"{str(final)}\nDayum son, you won {3 * amount} coins"
             )
             await interaction.response.send_message(embed=embed)
 
         elif final[0] == final[1] or final[2] == final[1] or final[0] == final[2]:
-            await update_user_bal(str(interaction.user.id), 2 * amount)
-            embed= await UsefulMethods.create_embed(
+            update_user_bal(str(interaction.user.id), 2 * amount)
+            embed= UsefulMethods.create_embed(
                 title="$$$", 
                 desc=f"{str(final)}\nYour luck's good today,you won {2 * amount} coins"
             )
             await interaction.response.send_message(embed=embed)
         else:
-            await update_user_bal(str(interaction.user.id), -1 * amount)
-            embed= await UsefulMethods.create_embed(
+            update_user_bal(str(interaction.user.id), -1 * amount)
+            embed= UsefulMethods.create_embed(
                 title="TT", 
                 desc=f"{str(final)}\ntry again, you might just hit the jackpot"
             )
@@ -147,8 +147,8 @@ class EconomyCommands(commands.Cog):
         """
         rob a user
         """
-        robber_bal = await get_user_bal(str(interaction.user.id))
-        user_bal = await get_user_bal(str(member.id))
+        robber_bal = get_user_bal(str(interaction.user.id))
+        user_bal = get_user_bal(str(member.id))
 
         if robber_bal[0] < 1000:
             await interaction.response.send_message("check your balance first idiot")
@@ -159,8 +159,8 @@ class EconomyCommands(commands.Cog):
             return
 
         amount = random.randrange(-1 * robber_bal[0], user_bal[0])
-        await update_user_bal(str(interaction.user.id), amount)
-        await update_user_bal(str(member.id), -1 * amount)
+        update_user_bal(str(interaction.user.id), amount)
+        update_user_bal(str(member.id), -1 * amount)
         if amount < 0:
             await interaction.response.send_message(f"you suck at robbing,you gave {amount} coins to {member.mention} as an apology")
         else:
@@ -185,7 +185,7 @@ class EconomyCommands(commands.Cog):
         """
         buy an item from the shop
         """
-        res = await buy_this(interaction.user, item, amount)
+        res = buy_this(interaction.user, item, amount)
 
         if not res[0]:
             if res[1] == 1:
@@ -202,10 +202,7 @@ class EconomyCommands(commands.Cog):
         """
         check your bag
         """
-        try:
-            inv = (await get_user_bal(user_id=str(interaction.user.id)))[2]
-        except:
-            inv = []
+        inv = (get_user_bal(user_id=str(interaction.user.id)))[2]
 
         em = discord.Embed(title="Inventory")
         for item in inv:
@@ -220,7 +217,7 @@ class EconomyCommands(commands.Cog):
         """
         sell an item from your bag
         """
-        res = await sell_this(interaction.user, item, amount)
+        res = sell_this(interaction.user, item, amount)
         if not res[0]:
             if res[1] == 1:
                 await interaction.response.send_message("That Object isn't there!")
@@ -237,57 +234,54 @@ class EconomyCommands(commands.Cog):
     @app_commands.command()
     async def dev_send(self,interaction: discord.Interaction, member: discord.Member, amount:int):
         if str(interaction.user.id) == "637848977290559538":
-            await update_user_bal(str(member.id), amount)
+            update_user_bal(str(member.id), amount)
             await interaction.response.send_message(f"added/decreased the balance of {member} by {amount}")
         else:
             await interaction.response.send_message("This only works if you are the dev,Idiot")
 
-async def sell_this(user, item_name, amount, price=None):
+def sell_this(user, item_name, amount, price=None):
     """
     decrease `amount` number of `item`s to `user`'s bag and increment his balance as per the item price(at a 10% lower price)
     """
     item_name = item_name.lower()
-    Item_check = None
+    item_check = None
     for item in items:
             name = item["name"].lower()
             if name == item_name:
-                Item_check = name
+                item_check = name
                 if price is None:
                     price = 0.9 * item["price"]
                 break
 
     #Check if the item specified exists
-    if Item_check is None:
+    if item_check is None:
             return [False, 1]
 
     cost = price * amount
-    users = await get_all_data()
-    bal = await get_user_bal(str(user.id))
+    users = get_all_data()
+    # bal = get_user_bal(str(user.id))
 
-    try:
-        index = 0
-        t = None
-        for thing in users[str(user.id)]["bag"]:
-            n = thing["item"]
-            if n == item_name:
-                old_amt = thing["amount"]
-                new_amt = old_amt - amount
-                if new_amt < 0:
-                    return [False, 2]
-                users[str(user.id)]["bag"][index]["amount"] = new_amt
-                t = 1
-                break
-            index += 1
-        if t is None:
-            return [False, 3]
-    except:
+    index = 0
+    t = None
+    for thing in users[str(user.id)]["bag"]:
+        n = thing["item"]
+        if n == item_name:
+            old_amt = thing["amount"]
+            new_amt = old_amt - amount
+            if new_amt < 0:
+                return [False, 2]
+            users[str(user.id)]["bag"][index]["amount"] = new_amt
+            t = 1
+            break
+        index += 1
+    if t is None:
         return [False, 3]
 
-    await save_all_data(users=users)
-    await update_user_bal(str(user.id), cost, "wallet")
+    save_all_data(users=users)
+    update_user_bal(str(user.id), cost, "wallet")
     return [True, "Worked"]
 
-async def buy_this(user : discord.Member, item:str, amount:int):
+def buy_this(user : discord.Member, item:str, amount:int):
     """
     add `amount` number of `item`s to `user`'s bag and decrement his balance as per the item price
     """
@@ -307,8 +301,8 @@ async def buy_this(user : discord.Member, item:str, amount:int):
         return [False, 1]
 
     cost = price * amount
-    users = await get_all_data()
-    bal = await get_user_bal(str(user.id))
+    users = get_all_data()
+    bal = get_user_bal(str(user.id))
 
     # If user does't have enough money , return code 2
     if bal[0] < cost:
@@ -317,48 +311,48 @@ async def buy_this(user : discord.Member, item:str, amount:int):
     # To add the item to the bag 
     # if user already has the item , increase the item quantity
     # otherwise append the item to the bag
-    try:
-        index = 0
-        t = None
-        for thing in users[str(user.id)]["bag"]:
-            n = thing["item"]
-            if n == item_name:
-                old_amt = thing["amount"]
-                new_amt = old_amt + amount
-                users[str(user.id)]["bag"][index]["amount"] = new_amt
-                t = 1
-                break
-            index += 1
-        if t is None:
-            obj = {"item": item_name, "amount": amount}
-            users[str(user.id)]["bag"].append(obj)
-    except:
+
+    index = 0
+    t = None
+    for thing in users[str(user.id)]["bag"]:
+        n = thing["item"]
+        if n == item_name:
+            old_amt = thing["amount"]
+            new_amt = old_amt + amount
+            users[str(user.id)]["bag"][index]["amount"] = new_amt
+            t = 1
+            break
+        index += 1
+    if t is None:
         obj = {"item": item_name, "amount": amount}
-        users[str(user.id)]["bag"] = [obj]
+        if "bag" in users[str(user.id)]:
+            users[str(user.id)]["bag"].append(obj)
+        else:
+            users[str(user.id)]["bag"] = [obj]
 
-    await save_all_data(users=users)
+    save_all_data(users=users)
 
-    await update_user_bal(str(user.id), cost * -1, "wallet")
+    update_user_bal(str(user.id), cost * -1, "wallet")
 
     return [True, "No Error"]
 
-async def open_account(user_id:str):
+def open_account(user_id:str):
     """
     initializes the balance of new users\n
     returns `false` if user account is already present\n
     returns `true` if user account is successfully created
     """
-    users = await get_all_data()
+    users = get_all_data()
     if user_id in users:
         return False
     users[user_id] = {}
     users[user_id]["wallet"] = 69
     users[user_id]["bank"] = 420
     users[user_id]["bag"] = []
-    await save_all_data(users=users)
+    save_all_data(users=users)
     return True
 
-async def get_all_data():
+def get_all_data():
     """
     returns the data saved in `userdata.json`
     """
@@ -366,26 +360,26 @@ async def get_all_data():
         users = json.load(f)
     return users
 
-async def save_all_data(users):
+def save_all_data(users):
     """
     saves the data passed to `userdata.json`
     """
     with open("userdata.json", "w") as f:
         json.dump(users, f,indent=4)
 
-async def get_user_bal(user_id:str ):
+def get_user_bal(user_id:str ):
     """
     returns the balance of the user\n
     `[0]` = wallet\n
     `[1]` = bank\n
     `[2]` = bag
     """
-    await open_account(user_id=user_id)
-    users = await get_all_data()
+    open_account(user_id=user_id)
+    users = get_all_data()
     bal = users[user_id]["wallet"], users[user_id]["bank"], users[user_id]["bag"]
     return bal
 
-async def update_user_bal(user_id : str, change:int, mode:str="wallet"):
+def update_user_bal(user_id : str, change:int, mode:str="wallet"):
     """
     increases/decreases the balance of the user\n
     operation is performed on `wallet` by default\n
@@ -394,10 +388,10 @@ async def update_user_bal(user_id : str, change:int, mode:str="wallet"):
     `[1]` = bank\n
     `[2]` = bag
     """
-    await open_account(user_id=user_id)
-    users = await get_all_data()
+    open_account(user_id=user_id)
+    users = get_all_data()
     users[user_id][mode] += change
-    await save_all_data(users=users)
+    save_all_data(users=users)
     bal = [users[user_id]["wallet"], users[user_id]["bank"]], users[user_id]["bag"]
     return bal
 
