@@ -8,7 +8,7 @@ modes = [
     "Logs"
 ]
 
-async def get_Guild_data():
+async def get_guild_data():
     """
     returns all the data stored in `guilddata.json`
     """
@@ -16,7 +16,7 @@ async def get_Guild_data():
         guilds = json.load(f)
     return guilds
 
-async def save_Guild_data(guilds):
+async def save_guild_data(guilds):
     """
     writes the data passed to the `guilddata.json` 
     """
@@ -29,13 +29,13 @@ async def set_init_vals(guild_id:str):
     `modes` = `Welcome`, `Exit`, `Logs`\n
     returns `False` if the values are already set and `True` otherwise
     """
-    guilds = await get_Guild_data()
+    guilds = await get_guild_data()
     if guild_id in guilds :
         return False
     guilds[guild_id] = {}
     for m in modes:
         guilds[guild_id][m] = None
-    await save_Guild_data(guilds=guilds)
+    await save_guild_data(guilds=guilds)
     return True
 
 async def get_channel(guild_id:str, mode: str = "Welcome"):
@@ -43,7 +43,7 @@ async def get_channel(guild_id:str, mode: str = "Welcome"):
     returns the channel associated with the `mode` for a paricular guild\n
     `modes = "Welcome", "Exit", "Logs"`
     """
-    guilds = await get_Guild_data()
+    guilds = await get_guild_data()
     return str(guilds[guild_id][mode])
 
 async def set_channel(interaction:discord.Interaction,channel:discord.TextChannel,mode:str):
@@ -58,9 +58,9 @@ async def set_channel(interaction:discord.Interaction,channel:discord.TextChanne
     
     await interaction.response.send_message(f"set {channel.mention} as the {mode} channel")
 
-    guilds = await get_Guild_data()
+    guilds = await get_guild_data()
     guilds[guild_id][mode] = channel_id
-    await save_Guild_data(guilds=guilds)
+    await save_guild_data(guilds=guilds)
 
 async def log(bot:commands.Bot,guild_id: str,message:str=None,embed:discord.Embed=None,mode:str = "Welcome"):
     """
